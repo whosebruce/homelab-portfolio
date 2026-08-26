@@ -1,0 +1,8 @@
+__pycache__/
+.pytest_cache/
+.venv/
+local-patterns.txt
+*.log
+*.env
+.env.*
+!.env.example
