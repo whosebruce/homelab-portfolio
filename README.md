@@ -119,7 +119,6 @@ CI runs the same two commands plus `git diff --check` on every push and pull req
 - [Presence Stack](https://github.com/whosebruce/presence-stack): privacy-first, agent-readable deployment harness for an owner-controlled digital presence.
 - [Local-First AI Receptionist](https://github.com/whosebruce/local-first-ai-receptionist): tiered intake with explicit trust boundaries and offline security verification.
 - [Hermes Discord Admin Pack](https://github.com/whosebruce/hermes-discord-admin-pack): sanitized setup and extension guide for Hermes Discord administration.
-- [Bruce Mission Control](https://github.com/whosebruce/bruce-mission-control): an operational dashboard for a multi-agent environment.
 
 ## License
 
