@@ -46,25 +46,20 @@ The important part is not the number of applications. It is operating them as on
 
 ## How I operate it
 
-1. **Discover before changing** — inventory the current state, dependencies, and failure domain.
-2. **Protect state** — take the appropriate configuration backup, snapshot, or rollback point.
-3. **Change narrowly** — update one layer or workload class at a time.
-4. **Verify every hop** — check the service, its dependencies, network path, storage path, and user-facing behavior.
-5. **Record evidence** — preserve what changed, what was tested, and what remains unresolved.
-6. **Recover deliberately** — use tested rollback and restore procedures instead of improvising under pressure.
+1. **Discover before changing.** Inventory the current state, dependencies, and failure domain.
+2. **Protect state.** Take the appropriate configuration backup, snapshot, or rollback point.
+3. **Change narrowly.** Update one layer or workload class at a time.
+4. **Verify every hop.** Check the service, its dependencies, network path, storage path, and user-facing behavior.
+5. **Record evidence.** Preserve what changed, what was tested, and what remains unresolved.
+6. **Recover deliberately.** Use tested rollback and restore procedures instead of improvising under pressure.
 
-More detail:
-
-- [Conceptual architecture](docs/ARCHITECTURE.md)
-- [Public service map](docs/PUBLIC-SERVICE-MAP.md)
-- [Operations and update lifecycle](docs/OPERATIONS.md)
-- [Security and disclosure policy](SECURITY.md)
+The detail behind each step is in the docs below.
 
 ## Hermes agent environment
 
 The lab includes multiple Hermes Agent instances with separate roles, identities, workspaces, communication routes, and permission boundaries. Depending on the role, an agent may use scheduled workflows, durable memory, approved file stores, research tools, local AI services, or narrowly scoped external integrations.
 
-The public design principle is simple:
+The public design principle:
 
 ```text
 Untrusted input
@@ -76,12 +71,17 @@ Untrusted input
 
 Privileged agents are not exposed as public chatbots, and public documentation does not include bot identities, channel identifiers, tokens, internal routes, or administrative URLs.
 
-## Related public projects
+## What's in this repository
 
-- [Presence Stack](https://github.com/whosebruce/presence-stack) — privacy-first, agent-readable deployment harness for an owner-controlled digital presence.
-- [Local-First AI Receptionist](https://github.com/whosebruce/local-first-ai-receptionist) — tiered intake with explicit trust boundaries and offline security verification.
-- [Hermes Discord Admin Pack](https://github.com/whosebruce/hermes-discord-admin-pack) — sanitized setup and extension guide for Hermes Discord administration.
-- [Bruce Mission Control](https://github.com/whosebruce/bruce-mission-control) — an operational dashboard for a multi-agent environment.
+| Path | Contents |
+| --- | --- |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Layered capability view, boundary decisions, and the failure domains considered |
+| [docs/PUBLIC-SERVICE-MAP.md](docs/PUBLIC-SERVICE-MAP.md) | Capability-level service map (deliberately not a live inventory) |
+| [docs/OPERATIONS.md](docs/OPERATIONS.md) | Maintenance loop, verification layers, agent operations, and incident response |
+| [SECURITY.md](SECURITY.md) | Disclosure rules and how to report something that should not be public |
+| [scripts/privacy_scan.py](scripts/privacy_scan.py) | Scanner for secrets and infrastructure indicators |
+| [tests/](tests/) | Unit tests for the scanner |
+| [.github/workflows/verify.yml](.github/workflows/verify.yml) | CI: tests, privacy scan, and whitespace check on every push and pull request |
 
 ## What is intentionally absent
 
@@ -97,13 +97,30 @@ That omission is part of the design. A portfolio should demonstrate engineering 
 
 ## Repository verification
 
+Needs Python 3 and Git; there are no third-party packages to install.
+
 ```bash
 python3 -m unittest discover -s tests -v
 python3 scripts/privacy_scan.py
 ```
 
-The scanner checks the working tree, exact Git index, and reachable history for common secret and infrastructure indicators. Operator-specific markers can be added locally through a gitignored `local-patterns.txt` file.
+The scanner checks the working tree, the exact Git index, and reachable history for common secret and infrastructure indicators. Findings report category, file, and line only, never the matched value. Pass `--surface tree`, `--surface index`, or `--surface history` (repeatable) to limit the scan.
+
+Operator-specific markers stay local:
+
+```bash
+cp local-patterns.txt.example local-patterns.txt   # gitignored; one literal per line
+```
+
+CI runs the same two commands plus `git diff --check` on every push and pull request.
+
+## Related public projects
+
+- [Presence Stack](https://github.com/whosebruce/presence-stack): privacy-first, agent-readable deployment harness for an owner-controlled digital presence.
+- [Local-First AI Receptionist](https://github.com/whosebruce/local-first-ai-receptionist): tiered intake with explicit trust boundaries and offline security verification.
+- [Hermes Discord Admin Pack](https://github.com/whosebruce/hermes-discord-admin-pack): sanitized setup and extension guide for Hermes Discord administration.
+- [Bruce Mission Control](https://github.com/whosebruce/bruce-mission-control): an operational dashboard for a multi-agent environment.
 
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE). Maintained by [@whosebruce](https://github.com/whosebruce).
